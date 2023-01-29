@@ -1,0 +1,42 @@
+syntax = "proto3";
+package com.grpcDemo;
+option java_multiple_files = true;
+
+message  Product{
+  int32 id = 1;
+  int32 user_id = 2;
+  string name = 3;
+  int32 size = 4;
+  string color = 5;
+  double price = 6;
+}
+
+enum Gender{
+  Male = 0;
+}
+
+message User{
+  int32 id = 1;
+  int32 product_id = 2;
+  string name = 3;
+}
+
+message Empty{}
+
+service ProductService{
+  //unary - synchronous
+  // client send one request and server respond one response
+  rpc getProduct(Product) returns(Product){}
+
+  //server-streaming - asynchronous
+  //  client send one request and server respond a stream of response
+  rpc getAllProducts(User) returns(stream Product){}
+
+  rpc getAllProductsInDb(Empty) returns(stream Product){}
+  //client-streaming - asynchronous
+  // client will send a stream of requests and the server will respond by one response
+  rpc getExpensiveProduct(stream Product) returns(Product){}
+  //bi-directional streaming - asynchronous
+//  client will send a stream of data and the server will respond a stream of data
+  rpc getProductsBySize(stream Product) returns (stream Product);
+}
